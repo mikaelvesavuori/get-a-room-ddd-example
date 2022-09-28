@@ -26,6 +26,10 @@ When it comes to integration work:
   - The room name or ID
   - The start and end times of the slot
 
+## Solution diagram
+
+![Complete solution diagram](/readme/solution-diagram.png)
+
 ## Structure
 
 - `code`: Source code
