@@ -1,6 +1,8 @@
 # Domain Driven Microservices on AWS in Practice
 
-This example/workshop focuses on setting up an event-driven architecture with the goal of demonstrating practically how such a system design can be manifested.
+_This project provides a Domain Driven Design & Clean Architecture-informed, multi-service event-driven architecture to run a simple room reservation application._
+
+Go to [https://ddd.mikaelvesavuori.se](https://ddd.mikaelvesavuori.se) for the book that introduces DDD and our example codebase (this one!).
 
 ## Scenario
 
