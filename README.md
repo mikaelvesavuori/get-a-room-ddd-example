@@ -4,6 +4,12 @@ _This project provides a Domain Driven Design & Clean Architecture-informed, mul
 
 **Go to [https://ddd.mikaelvesavuori.se](https://ddd.mikaelvesavuori.se) for the book that introduces DDD and our example codebase (this one!).**
 
+## Detailed instructions in READMEs of each Bounded Context (microservice)
+
+This README only sets the overall stage. Please refer to the respective `README.md` files for each microservice in the `code` directory.
+
+---
+
 ## Scenario
 
 The expensive and outdated room booking system at your company has been making life miserable for pretty much everyone there. Your team has volunteered to replace the system with a cost-efficient custom implementation, with a target of doing so within the space of one week. To drive down cost and maintenance you've already settled on using serverless cloud technologies as the core components. Now comes the real question: How do you _design_ the system?
@@ -33,16 +39,8 @@ When it comes to integration work:
 ## Structure
 
 - `code`: Source code
-- `data-modeling`: JSON files to use when starting to model the data
+- `data-modeling`: JSON files that at least roughly attempt to show requests and responses etc.
 - `diagrams`: Diagrams for the solution
-
-## Data modeling
-
-The `data-modeling` folder contains various forms of data which we can model and fill in for our use case.
-
-We can skip any envelope level here and just focus on the original data contents instead.
-
-For dynamic values, set the field similar to the format `"<Some description here>"`.
 
 ## Out of scope
 
