@@ -1,0 +1,92 @@
+[
+  {
+    "name": "It should reserve a slot and as a result receive a code back",
+    "path": "ReserveSlot",
+    "payload": {
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "id": "WILL_BE_PROGRAMMATICALLY_REPLACED",
+        "host": "Somebody Somebodyson"
+      }
+    },
+    "expectation": {
+      "code": "abcd1234"
+    },
+    "schema": {
+      "type": "object",
+      "properties": {
+        "code": { "type": "string" }
+      },
+      "required": ["code"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "It should check into a slot",
+    "path": "CheckIn",
+    "payload": {
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "WILL_BE_PROGRAMMATICALLY_REPLACED"
+      },
+      "body": {
+        "id": "WILL_BE_PROGRAMMATICALLY_REPLACED"
+      }
+    },
+    "expectation": ""
+  },
+  {
+    "name": "It should check out of a slot",
+    "path": "CheckOut",
+    "payload": {
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "WILL_BE_PROGRAMMATICALLY_REPLACED"
+      },
+      "body": {
+        "id": "WILL_BE_PROGRAMMATICALLY_REPLACED"
+      }
+    },
+    "expectation": ""
+  },
+  {
+    "name": "It should reserve a slot and as a result receive a code back",
+    "path": "ReserveSlot",
+    "payload": {
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "id": "WILL_BE_PROGRAMMATICALLY_REPLACED",
+        "host": "Somebody Somebodyson"
+      }
+    },
+    "expectation": {
+      "code": "abcd1234"
+    },
+    "schema": {
+      "type": "object",
+      "properties": {
+        "code": { "type": "string" }
+      },
+      "required": ["code"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "It should cancel a slot",
+    "path": "CancelSlot",
+    "payload": {
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "WILL_BE_PROGRAMMATICALLY_REPLACED"
+      },
+      "body": {
+        "id": "WILL_BE_PROGRAMMATICALLY_REPLACED"
+      }
+    },
+    "expectation": ""
+  }
+]

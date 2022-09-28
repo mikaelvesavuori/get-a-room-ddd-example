@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Reserve a time slot",
+  "description": "Reserve a time slot for a given host",
+  "type": "object",
+  "definitions": {
+    "id": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "host": {
+      "type": "string",
+      "pattern": "^.{1,100}$"
+    }
+  },
+  "required": ["id", "host"],
+  "properties": {
+    "id": {
+      "$ref": "#/definitions/id",
+      "type": "string",
+      "title": "id",
+      "description": "The slot ID"
+    },
+    "host": {
+      "$ref": "#/definitions/host",
+      "type": "string",
+      "title": "host",
+      "description": "The host's name"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,4 @@
+{
+  "event": "SomethingHere",
+  "description": "TODO some kind of integration event outside of context or domain"
+}

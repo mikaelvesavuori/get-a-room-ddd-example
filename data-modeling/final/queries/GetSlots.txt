@@ -1,0 +1,7 @@
+GET {{ENDPOINT}}/slots
+
+---
+Get all bookings for the day.
+---
+
+Query on Primary Key (`date`) and filter on TODO

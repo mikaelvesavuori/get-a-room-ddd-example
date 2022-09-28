@@ -1,0 +1,271 @@
+service: getaroom-slotreservation
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  stage: ${opt:stage, 'shared'}
+  region: ${opt:region, 'eu-north-1'}
+  memorySize: ${opt:memory, 1024}
+  timeout: 10
+  logRetentionInDays: 7
+  versionFunctions: false
+  deploymentBucket:
+    blockPublicAccess: true
+    maxPreviousDeploymentArtifacts: 5
+    serverSideEncryption: AES256
+  stackTags:
+    Usage: ${self:service}
+  tags:
+    Usage: ${self:service}
+  apiGateway:
+    minimumCompressionSize: 1024
+  tracing:
+    apiGateway: true
+    lambda: true
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - xray:PutTelemetryRecords
+            - xray:PutTraceSegments
+          Resource:
+            - "*"
+        - Effect: "Allow"
+          Action:
+            - dynamodb:Query
+            - dynamodb:PutItem
+          Resource: ${self:custom.aws.databaseArn}
+        - Effect: Allow
+          Action:
+            - events:PutEvents
+          Resource:
+            - ${self:custom.aws.analyticsBusArn}
+            - ${self:custom.aws.domainBusArn}
+  environment:
+    ANALYTICS_BUS_NAME: ${self:custom.config.analyticsBusName}
+    DOMAIN_BUS_NAME: ${self:custom.config.domainBusName}
+    REGION: ${self:provider.region}
+    TABLE_NAME: ${self:custom.config.tableName}
+    SECURITY_API_ENDPOINT_GENERATE: ${self:custom.aws.securityApiEndpointGenerateCode}
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+  - serverless-iam-roles-per-function
+
+package:
+  individually: true
+  patterns:
+    - node_modules/aws-sdk/**
+    - node_modules/aws-lambda/**
+
+custom:
+  config:
+    # MAKE SURE TO UPDATE THE ACCOUNT NUMBER AND RANDOM STRING
+    # GET YOUR API GATEWAY RANDOM STRING AFTER FIRST DEPLOYMENT OF SECURITY API
+    awsAccountNumber: 123412341234
+    securityApiGatewayRandomString: q5tfpxckuk
+    # You can change these but you need to be sure all other references are updated too in case you change them
+    analyticsBusName: analytics
+    domainBusName: reservation
+    tableName: getaroom-reservation
+    apiGatewayCachingTtl:
+      prod: 30
+      shared: 0
+      test: 0
+    apiGatewayCachingTtlValue: ${self:custom.config.apiGatewayCachingTtl.${self:provider.stage}, self:custom.config.apiGatewayCachingTtl.test} # See: https://forum.serverless.com/t/api-gateway-custom-authorizer-caching-problems/4695
+  aws:
+    analyticsBusArn: arn:aws:events:${self:provider.region}:${self:custom.config.awsAccountNumber}:event-bus/${self:custom.config.analyticsBusName}
+    domainBusArn: arn:aws:events:${self:provider.region}:${self:custom.config.awsAccountNumber}:event-bus/${self:custom.config.domainBusName}
+    databaseArn: arn:aws:dynamodb:${self:provider.region}:${self:custom.config.awsAccountNumber}:table/${self:custom.config.tableName}
+    securityApiEndpointGenerateCode: https://${self:custom.config.securityApiGatewayRandomString}.execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}/generateCode
+    securityApiEndpointVerifyCode: https://${self:custom.config.securityApiGatewayRandomString}.execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}/verifyCode
+  webpack:
+    webpackConfig: 'webpack.config.js'
+    includeModules: true
+    packager: 'npm'
+    excludeFiles: ./**/*.test.ts
+
+functions:
+  #
+  # The authorizer function runs before all user-initiated requests fronted by it
+  #
+  Authorizer:
+    handler: src/infrastructure/authorizers/Authorizer.handler
+    description: ${self:service} authorizer
+    environment:
+      SECURITY_API_ENDPOINT_VERIFY: ${self:custom.aws.securityApiEndpointVerifyCode}
+  #
+  # These use cases are driven by user interactions.
+  #
+  ReserveSlot:
+    handler: src/infrastructure/adapters/web/ReserveSlot.handler
+    description: Reserve a slot
+    events:
+      - http:
+          method: POST
+          path: /ReserveSlot
+          request:
+            schemas:
+              application/json: ${file(schema/ReserveSlot.validator.json)}
+  CancelSlot:
+    handler: src/infrastructure/adapters/web/CancelSlot.handler
+    description: Cancel a slot
+    events:
+      - http:
+          method: POST
+          path: /CancelSlot
+          authorizer:
+            name: Authorizer
+            resultTtlInSeconds: ${self:custom.config.apiGatewayCachingTtlValue}
+            identitySource: method.request.header.Authorization
+            type: request
+          request:
+            schemas:
+              application/json: ${file(schema/Id.validator.json)}
+  CheckIn:
+    handler: src/infrastructure/adapters/web/CheckIn.handler
+    description: Check in to slot
+    events:
+      - http:
+          method: POST
+          path: /CheckIn
+          authorizer:
+            name: Authorizer
+            resultTtlInSeconds: ${self:custom.config.apiGatewayCachingTtlValue}
+            identitySource: method.request.header.Authorization
+            type: request
+          request:
+            schemas:
+              application/json: ${file(schema/Id.validator.json)}
+  CheckOut:
+    handler: src/infrastructure/adapters/web/CheckOut.handler
+    description: Check out from slot
+    events:
+      - http:
+          method: POST
+          path: /CheckOut
+          authorizer:
+            name: Authorizer
+            resultTtlInSeconds: ${self:custom.config.apiGatewayCachingTtlValue}
+            identitySource: method.request.header.Authorization
+            type: request
+          request:
+            schemas:
+              application/json: ${file(schema/Id.validator.json)}
+  #
+  # These use cases are driven by scheduled events.
+  # Time is "Zulu time" (GMT+0)
+  # See: https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html
+  # ---> 1. Minutes 2. Hours 3. Day-of-month 4. Month 5. Day-of-week 6. Year
+  #
+  CreateSlots:
+    handler: src/infrastructure/adapters/web/CreateSlots.handler
+    description: Create new slots
+    events:
+      # You can activate this to allow for HTTP-based calls
+      - http:
+          method: GET
+          path: /CreateSlots
+      - schedule: cron(0 5 ? * MON-FRI *)
+  UnattendSlots:
+    handler: src/infrastructure/adapters/web/UnattendSlots.handler
+    description: Check if any slots are unattended at 10 minutes past the hour
+    events:
+      # You can activate this to allow for HTTP-based calls
+      - http:
+          method: GET
+          path: /UnattendSlots
+      - schedule: cron(10 6-16 ? * MON-FRI *)
+  CloseSlots:
+    handler: src/infrastructure/adapters/web/CloseSlots.handler
+    description: Close any slots that have passed their end times
+    events:
+       # You can activate this to allow for HTTP-based calls
+      - http:
+          method: GET
+          path: /CloseSlots
+      - schedule: cron(0 7-17 ? * MON-FRI *)
+  #
+  # These use cases are driven by events in the system.
+  #
+  OpenSlot:
+    handler: src/infrastructure/adapters/web/OpenSlot.handler
+    description: Open a slot
+    events:
+       # You can activate this to allow for HTTP-based calls
+      - http:
+          method: POST
+          path: /OpenSlot
+      - eventBridge:
+          eventBus: ${self:custom.config.domainBusName} # Create new EventBridge bus
+          pattern:
+            source:
+              - getaroom.reservation.cancelled
+          deadLetterQueueArn:
+            Fn::GetAtt:
+              - ReservationBusDlq
+              - Arn
+          retryPolicy:
+            maximumEventAge: 3600
+            maximumRetryAttempts: 3
+
+resources:
+  Resources:
+    # DynamoDB
+    SlotsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.config.tableName}
+        AttributeDefinitions:
+          - AttributeName: itemType
+            AttributeType: S
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: itemType
+            KeyType: HASH
+          - AttributeName: id
+            KeyType: RANGE
+        TimeToLiveSpecification:
+          AttributeName: expiresAt
+          Enabled: true
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
+        BillingMode: PAY_PER_REQUEST
+    # API Gateway
+    GatewayResponseDefault4XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+    AuthFailureExpiredGatewayResponse:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: EXPIRED_TOKEN
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+        StatusCode: '401'
+    AuthFailureUnauthorizedGatewayResponse:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: UNAUTHORIZED
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+        StatusCode: '401'
+    # SQS Dead Letter Queue
+    ReservationBusDlq:
+      Type: 'AWS::SQS::Queue'
+      Properties:
+        QueueName: ReservationBusDlq

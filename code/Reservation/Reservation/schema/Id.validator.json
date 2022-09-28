@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Cancel/check into/check out of a time slot",
+  "description": "Cancel/check into/check out of an ID'ed time slot",
+  "type": "object",
+  "definitions": {
+    "id": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    }
+  },
+  "required": ["id", "host"],
+  "properties": {
+    "id": {
+      "$ref": "#/definitions/id",
+      "type": "string",
+      "title": "id",
+      "description": "The slot ID"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "build",
+    "target": "es2020",
+    "lib": ["esnext"],
+    "declaration": false,
+    "esModuleInterop": true,
+    "importHelpers": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "strict": true
+  },
+  "include": ["./src/**/*.ts", "./__tests__/**/*.ts"],
+  "exclude": ["node_modules/", "./build/"]
+}

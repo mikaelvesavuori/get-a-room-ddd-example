@@ -1,0 +1,64 @@
+{
+  "name": "getaroom-slotdisplay",
+  "version": "1.0.0",
+  "description": "Slot display",
+  "main": "index.js",
+  "author": "Mikael Vesavuori",
+  "license": "MIT",
+  "scripts": {
+    "start": "npx sls offline",
+    "test": "npx c8 ava",
+    "test:types": "npx type-coverage --at-least 92.5 --strict --ignore-files \"__tests__/**/*.ts\" --ignore-files \"src/application/errors/*.ts\" --ignore-files \"testdata/*.ts\"",
+    "docs": "rm -rf docs && mkdir docs && npm run docs:madge && npm run docs:cfndia && npm run docs:typedoc && npm run docs:asyncapi",
+    "docs:madge": "npx madge --image docs/code-diagram.svg --exclude '(testdata|interfaces|application/errors)/.{0,}.(ts|js|json)' --extensions ts src",
+    "docs:cfndia": "npx cfn-dia draw.io -t .serverless/cloudformation-template-update-stack.json --ci-mode -o docs/cfn-diagram.drawio",
+    "docs:typedoc": "npx typedoc --entryPoints src --entryPointStrategy expand --exclude '**/*+(test).ts' --externalPattern 'node_modules/**/*' --excludeExternals --out docs",
+    "docs:asyncapi": "npx ag schema/asyncapi.json @asyncapi/html-template --output docs/api --force-write",
+    "deploy": "npx sls deploy",
+    "teardown": "npx sls remove"
+  },
+  "keywords": [],
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "3",
+    "mikrolog": "2"
+  },
+  "devDependencies": {
+    "@asyncapi/generator": "1",
+    "@ava/typescript": "3",
+    "@mhlabs/cfn-diagram": "1",
+    "@types/aws-lambda": "8",
+    "@types/node": "17",
+    "@types/uuid": "8",
+    "@typescript-eslint/eslint-plugin": "5",
+    "@typescript-eslint/parser": "5",
+    "ava": "4",
+    "babel-loader": "8",
+    "c8": "7",
+    "eslint": "8",
+    "eslint-config-prettier": "8",
+    "eslint-plugin-prettier": "4",
+    "madge": "5",
+    "prettier": "2",
+    "serverless": "3",
+    "serverless-iam-roles-per-function": "3",
+    "serverless-offline": "8",
+    "serverless-webpack": "5",
+    "ts-loader": "9",
+    "tslib": "2",
+    "type-coverage": "2",
+    "typedoc": "latest",
+    "webpack": "5",
+    "webpack-cli": "4"
+  },
+  "ava": {
+    "typescript": {
+      "rewritePaths": {
+        "src/": "build/"
+      },
+      "compile": false
+    },
+    "require": [
+      "ts-node/register"
+    ]
+  }
+}

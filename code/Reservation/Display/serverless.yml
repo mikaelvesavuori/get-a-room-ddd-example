@@ -1,0 +1,128 @@
+service: getaroom-slotdisplay
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  stage: ${opt:stage, 'shared'}
+  region: ${opt:region, 'eu-north-1'}
+  memorySize: ${opt:memory, 1024}
+  timeout: 10
+  logRetentionInDays: 7
+  versionFunctions: false
+  deploymentBucket:
+    blockPublicAccess: true
+    maxPreviousDeploymentArtifacts: 5
+    serverSideEncryption: AES256
+  stackTags:
+    Usage: ${self:service}
+  tags:
+    Usage: ${self:service}
+  apiGateway:
+    minimumCompressionSize: 1024
+  tracing:
+    apiGateway: true
+    lambda: true
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - xray:PutTelemetryRecords
+            - xray:PutTraceSegments
+          Resource:
+            - "*"
+  environment:
+    REGION: ${self:provider.region}
+    TABLE_NAME: ${self:custom.config.tableName}
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+  - serverless-iam-roles-per-function
+
+package:
+  individually: true
+  patterns:
+    - node_modules/aws-sdk/**
+    - node_modules/aws-lambda/**
+
+custom:
+  aws:
+    databaseArn: "arn:aws:dynamodb:${self:provider.region}:${self:custom.config.awsAccountNumber}:table/${self:custom.config.tableName}"
+    domainBusArn: "arn:aws:events:${self:provider.region}:${self:custom.config.awsAccountNumber}:event-bus/${self:custom.config.domainBusName}"
+  config:
+    awsAccountNumber: 123412341234
+    # Must be provided as ARN if created after the one in SlotReservation
+    # Must stay in sync with the EventBridge created by `SlotReservation`
+    domainBusName: reservation
+    tableName: getaroom-display
+  webpack:
+    webpackConfig: 'webpack.config.js'
+    includeModules: true
+    packager: 'npm'
+    excludeFiles: ./**/*.test.ts
+
+functions:
+  GetSlots:
+    handler: src/infrastructure/adapters/web/GetSlots.handler
+    description: Get room time slots
+    events:
+      - http:
+          method: GET
+          path: /slots
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - dynamodb:Query
+        Resource: ${self:custom.aws.databaseArn}
+  UpdateSlot:
+    handler: src/infrastructure/adapters/web/UpdateSlot.handler
+    description: Update a room slot projection
+    events:
+      # Can be activated if you need to do HTTP-based calls or testing
+      #- http:
+      #    method: POST
+      #    path: /update
+      - eventBridge:
+          eventBus: ${self:custom.aws.domainBusArn}
+          pattern:
+            detail-type:
+              # User events
+              - "Created"
+              - "Cancelled"
+              - "Reserved"
+              - "CheckedIn"
+              - "CheckedOut"
+              - "Unattended"
+              # System events
+              - "Closed"
+            source:
+              - prefix: ""
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - dynamodb:PutItem
+        Resource: ${self:custom.aws.databaseArn}
+
+resources:
+  Resources:
+    SlotsDisplayTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.config.tableName}
+        AttributeDefinitions:
+          - AttributeName: itemType
+            AttributeType: S
+          - AttributeName: slotId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: itemType
+            KeyType: HASH
+          - AttributeName: slotId
+            KeyType: RANGE
+        TimeToLiveSpecification:
+          AttributeName: expiresAt
+          Enabled: true
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
+        BillingMode: PAY_PER_REQUEST

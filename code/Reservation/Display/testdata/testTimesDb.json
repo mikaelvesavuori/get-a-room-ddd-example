@@ -1,0 +1,10 @@
+{
+  "Items": [
+    {
+      "slotId": { "S": "fake-1234" },
+      "hostName": { "S": "Sam Person" },
+      "slotStatus": { "S": "RESERVED" },
+      "startsAt": { "S": "2022-01-01" }
+    }
+  ]
+}

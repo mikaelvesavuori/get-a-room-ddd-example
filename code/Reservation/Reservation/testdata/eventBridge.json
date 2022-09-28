@@ -1,0 +1,11 @@
+{
+  "version": "0",
+  "id": "0889777d-c38a-89c4-5eb1-ff9416f9cf35",
+  "detail-type": "test",
+  "source": "getaroom.reservation.cancelled",
+  "account": "123412341234",
+  "time": "2022-06-01T18:29:25Z",
+  "region": "eu-north-1",
+  "resources": [],
+  "detail": { "slotId": "4fe95528-c265-425a-8502-baf20ed41545" }
+}

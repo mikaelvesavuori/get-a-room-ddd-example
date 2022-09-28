@@ -1,0 +1,126 @@
+service: getaroom-verificationcode
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  stage: ${opt:stage, 'shared'}
+  region: ${opt:region, 'eu-north-1'}
+  memorySize: ${opt:memory, 1024}
+  timeout: 10
+  logRetentionInDays: 7
+  versionFunctions: false
+  deploymentBucket:
+    blockPublicAccess: true
+    maxPreviousDeploymentArtifacts: 5
+    serverSideEncryption: AES256
+  stackTags:
+    Usage: ${self:service}
+  tags:
+    Usage: ${self:service}
+  apiGateway:
+    minimumCompressionSize: 1024
+  tracing:
+    apiGateway: true
+    lambda: true
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - xray:PutTelemetryRecords
+            - xray:PutTraceSegments
+          Resource:
+            - "*"
+  environment:
+    REGION: ${self:provider.region}
+    TABLE_NAME: ${self:custom.config.tableName}
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+  - serverless-iam-roles-per-function
+
+package:
+  individually: true
+  patterns:
+    - node_modules/aws-sdk/**
+    - node_modules/aws-lambda/**
+
+custom:
+  config:
+    awsAccountNumber: 123412341234
+    domainBusName: reservation
+    tableName: getaroom-verificationcode
+  aws:
+    databaseArn: arn:aws:dynamodb:${self:provider.region}:${self:custom.config.awsAccountNumber}:table/${self:custom.config.tableName}
+    domainBusArn: arn:aws:events:${self:provider.region}:${self:custom.config.awsAccountNumber}:event-bus/${self:custom.config.domainBusName}
+  webpack:
+    webpackConfig: 'webpack.config.js'
+    includeModules: true
+    packager: 'npm'
+    excludeFiles: ./**/*.test.ts
+
+functions:
+  GenerateCode:
+    handler: src/infrastructure/adapters/web/GenerateCode.handler
+    description: Generate a room code
+    events:
+      - http:
+          method: POST
+          path: /generateCode
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - dynamodb:PutItem
+        Resource: ${self:custom.aws.databaseArn}
+  RemoveCode:
+    handler: src/infrastructure/adapters/web/RemoveCode.handler
+    description: Remove a room code
+    events:
+      - http:
+          method: POST
+          path: /removeCode
+      - eventBridge:
+          eventBus: ${self:custom.aws.domainBusArn}
+          pattern:
+            detail-type:
+              - "Closed"
+              - "Cancelled"
+              - "CheckedOut"
+              - "Unattended"
+            source:
+              - prefix: ""
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - dynamodb:DeleteItem
+        Resource: ${self:custom.aws.databaseArn}
+  VerifyCode:
+    handler: src/infrastructure/adapters/web/VerifyCode.handler
+    description: Check validity of a slot verification code
+    events:
+      - http:
+          method: POST
+          path: /verifyCode
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - dynamodb:Query
+        Resource: ${self:custom.aws.databaseArn}
+
+resources:
+  Resources:
+    VerificationCodeTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.config.tableName}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        TimeToLiveSpecification:
+          AttributeName: expiresAt
+          Enabled: true
+        BillingMode: PAY_PER_REQUEST

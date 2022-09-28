@@ -1,0 +1,12 @@
+{
+  "Items": [
+    {
+      "id": { "S": "fake-1234" },
+      "hostName": { "S": "fake-verification-code" },
+      "timeSlot": { "S": "{\"startTime\":\"2022-01-01\"}" },
+      "slotStatus": { "S": "OPEN" },
+      "createdAt": { "S": "2022-01-01" },
+      "updatedAt": { "S": "2050-01-01" }
+    }
+  ]
+}

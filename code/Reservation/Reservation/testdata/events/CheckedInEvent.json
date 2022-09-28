@@ -1,0 +1,29 @@
+{
+  "Detail": {
+    "data": {
+      "event": "CHECKED_IN",
+      "hostName": "test",
+      "slotId": "test",
+      "slotStatus": "CHECKED_IN",
+      "startTime": "2050-01-01"
+    },
+    "metadata": {
+      "correlationId": "UNKNOWN",
+      "dataSensitivity": "public",
+      "domain": "getaroom",
+      "jurisdiction": "eu",
+      "lifecycleStage": "production",
+      "owner": "MyOrg",
+      "hostPlatform": "aws",
+      "region": "eu-north-1",
+      "service": "someservice",
+      "system": "reservation",
+      "tags": [""],
+      "team": "someteam",
+      "version": 1
+    }
+  },
+  "DetailType": "CheckedIn",
+  "EventBusName": "DomainBusTest",
+  "Source": "getaroom.reservation.checkedin"
+}

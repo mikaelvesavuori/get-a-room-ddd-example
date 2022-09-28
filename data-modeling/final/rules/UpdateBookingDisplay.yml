@@ -1,0 +1,6 @@
+eventBus: BookingBus
+pattern:
+  source:
+    - Booking.Booked.Integration # TODO ???
+  detail-type:
+    - BookedRoom

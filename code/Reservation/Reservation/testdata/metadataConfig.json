@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "lifecycleStage": "production",
+  "domain": "getaroom",
+  "system": "reservation",
+  "service": "someservice",
+  "team": "someteam",
+  "type": "",
+  "tags": [""],
+  "dataSensitivity": "public",
+  "timestampRequest": "1566833470100",
+  "user": "",
+  "route": "/createOrder",
+  "hostPlatform": "aws",
+  "owner": "MyOrg",
+  "region": "eu-north-1",
+  "jurisdiction": "eu"
+}

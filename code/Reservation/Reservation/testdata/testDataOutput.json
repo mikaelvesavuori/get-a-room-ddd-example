@@ -1,0 +1,12 @@
+[
+  {
+    "slotId": "fake-1234",
+    "hostName": "fake-verification-code",
+    "timeSlot": {
+      "startTime": "2022-01-01"
+    },
+    "slotStatus": "OPEN",
+    "createdAt": "2022-01-01",
+    "updatedAt": "2050-01-01"
+  }
+]

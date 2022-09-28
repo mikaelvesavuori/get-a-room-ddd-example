@@ -1,0 +1,32 @@
+{
+  "EventBusName": "DomainBusTest",
+  "Source": "getaroom.reservation.created",
+  "DetailType": "Created",
+  "Detail": {
+    "metadata": {
+      "timestamp": "2022-08-01T08:15:15.747Z",
+      "timestampEpoch": "1659341715747",
+      "id": "12b49cb1-effc-456b-a39d-dc15c03250e0",
+      "correlationId": "UNKNOWN",
+      "version": 1,
+      "lifecycleStage": "production",
+      "domain": "getaroom",
+      "system": "reservation",
+      "service": "someservice",
+      "team": "someteam",
+      "hostPlatform": "aws",
+      "owner": "MyOrg",
+      "region": "eu-north-1",
+      "jurisdiction": "eu",
+      "tags": [""],
+      "dataSensitivity": "public"
+    },
+    "data": {
+      "event": "CREATED",
+      "slotId": "test",
+      "slotStatus": "OPEN",
+      "hostName": "test",
+      "startTime": "2050-01-01"
+    }
+  }
+}

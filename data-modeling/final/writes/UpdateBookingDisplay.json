@@ -1,0 +1,7 @@
+{
+  "host": "Host Name",
+  "room": "Room name",
+  "startsAt": "15:00",
+  "endsAt": "16:00",
+  "status": "<Status>"
+}

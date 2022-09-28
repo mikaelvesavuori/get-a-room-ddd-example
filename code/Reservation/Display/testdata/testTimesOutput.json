@@ -1,0 +1,8 @@
+[
+  {
+    "hostName": "Sam Person",
+    "slotId": "fake-1234",
+    "slotStatus": "RESERVED",
+    "startsAt": "2022-01-01"
+  }
+]

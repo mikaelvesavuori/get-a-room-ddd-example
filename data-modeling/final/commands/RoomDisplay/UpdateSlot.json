@@ -1,0 +1,7 @@
+{
+  "event": "CANCELLED",
+  "slotId": "asdf1234",
+  "slotStatus": "OPEN",
+  "startsAt": "2022-05-01",
+  "hostName": "Somebody"
+}

@@ -1,0 +1,27 @@
+{
+  "name": "minibook-project-domain-driven-microservices-aws-in-practice",
+  "description": "Project for minibook 'Domain Driven Microservices on AWS in Practice'",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikaelvesavuori/minibook-project-domain-driven-microservices-aws-in-practice.git"
+  },
+  "keywords": [],
+  "author": "Mikael Vesavuori",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mikaelvesavuori/minibook-project-domain-driven-microservices-aws-in-practice/issues"
+  },
+  "homepage": "https://github.com/mikaelvesavuori/minibook-project-domain-driven-microservices-aws-in-practice#readme",
+  "scripts": {
+    "deploy": "npx sls deploy"
+  },
+  "devDependencies": {
+    "@serverless/compose": "1",
+    "serverless": "3"
+  },
+  "dependencies": {
+    "@types/node": "17"
+  }
+}
