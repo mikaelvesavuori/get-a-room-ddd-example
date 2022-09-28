@@ -2,7 +2,7 @@
 
 _This project provides a Domain Driven Design & Clean Architecture-informed, multi-service event-driven architecture to run a simple room reservation application._
 
-Go to [https://ddd.mikaelvesavuori.se](https://ddd.mikaelvesavuori.se) for the book that introduces DDD and our example codebase (this one!).
+**Go to [https://ddd.mikaelvesavuori.se](https://ddd.mikaelvesavuori.se) for the book that introduces DDD and our example codebase (this one!).**
 
 ## Scenario
 
