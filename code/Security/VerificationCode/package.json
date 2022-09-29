@@ -8,7 +8,7 @@
     "test": "npx c8 ava",
     "test:types": "npx type-coverage --at-least 95 --strict --ignore-files \"__tests__/**/*.ts\" --ignore-files \"src/application/errors/*.ts\"",
     "docs": "rm -rf docs && mkdir docs && npm run docs:madge && npm run docs:cfndia && npm run docs:typedoc && npm run docs:asyncapi",
-    "docs:madge": "npx madge --image docs/code-diagram.svg --exclude '(testdata|interfaces|application/errors)/.{0,}.(ts|js|json)' --extensions ts src",
+    "docs:madge": "npx madge --image docs/code-diagram.svg --exclude '(testdata|interfaces|application/errors|infrastructure/utils|config)/.{0,}.(ts|js|json)' --extensions ts src",
     "docs:cfndia": "npx cfn-dia draw.io -t .serverless/cloudformation-template-update-stack.json --ci-mode -o docs/cfn-diagram.drawio",
     "docs:typedoc": "npx typedoc --entryPoints src --entryPointStrategy expand --exclude '**/*+(test).ts' --externalPattern 'node_modules/**/*' --excludeExternals --out docs",
     "docs:asyncapi": "npx ag schema/asyncapi.json @asyncapi/html-template --output docs/api --force-write",
