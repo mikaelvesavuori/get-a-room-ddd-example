@@ -1,0 +1,196 @@
+{
+  "asyncapi": "2.5.0",
+  "info": {
+    "title": "VerificationCode",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Sam Person",
+      "url": "https://acmecorp.com/docs#owner",
+      "email": "sam@acmecorp.xyz"
+    },
+    "description": "`VerificationCode` generates and validates codes for slot reservations."
+  },
+  "externalDocs": {
+    "description": "Confluence documentation",
+    "url": "https://acmecorp.com/VerificationCode/docs"
+  },
+  "servers": {
+    "production": {
+      "url": "https://RANDOM.execute-api.REGION.amazonaws.com/prod",
+      "protocol": "http",
+      "description": "Production endpoint."
+    }
+  },
+  "channels": {
+    "generateCode": {
+      "publish": {
+        "message": {
+          "$ref": "#/components/messages/GenerateCode"
+        },
+        "bindings": {
+          "http": {
+            "type": "request",
+            "method": "POST"
+          }
+        }
+      },
+      "subscribe": {
+        "message": {
+          "$ref": "#/components/messages/GenerateCodeResponse"
+        },
+        "bindings": {
+          "http": {
+            "type": "request",
+            "method": "POST"
+          }
+        }
+      }
+    },
+    "removeCode": {
+      "publish": {
+        "message": {
+          "$ref": "#/components/messages/RemoveCode"
+        },
+        "bindings": {
+          "http": {
+            "type": "request",
+            "method": "POST"
+          }
+        }
+      },
+      "subscribe": {
+        "message": {
+          "$ref": "#/components/messages/RemoveCodeResponse"
+        },
+        "bindings": {
+          "http": {
+            "type": "request",
+            "method": "POST"
+          }
+        }
+      }
+    },
+    "verifyCode": {
+      "publish": {
+        "message": {
+          "$ref": "#/components/messages/VerifyCode"
+        },
+        "bindings": {
+          "http": {
+            "type": "request",
+            "method": "POST"
+          }
+        }
+      },
+      "subscribe": {
+        "message": {
+          "$ref": "#/components/messages/VerifyCodeResponse"
+        },
+        "bindings": {
+          "http": {
+            "type": "request",
+            "method": "POST"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "messages": {
+      "GenerateCode": {
+        "name": "GenerateCode",
+        "title": "GenerateCode",
+        "summary": "Generate a verification code for a provided slot ID.",
+        "contentType": "application/json",
+        "payload": {
+          "$ref": "#/components/schemas/SlotIdInput"
+        }
+      },
+      "GenerateCodeResponse": {
+        "name": "GenerateCodeResponse",
+        "title": "GenerateCodeResponse",
+        "summary": "Returns the name of the customer using the given ID.",
+        "contentType": "application/json",
+        "payload": {
+          "$ref": "#/components/schemas/GenerateCodeResponse"
+        }
+      },
+      "RemoveCode": {
+        "name": "RemoveCode",
+        "title": "RemoveCode",
+        "summary": "Remove a verification code for a provided slot ID.",
+        "contentType": "application/json",
+        "payload": {
+          "$ref": "#/components/schemas/SlotIdInput"
+        }
+      },
+      "RemoveCodeResponse": {
+        "name": "RemoveCodeResponse",
+        "title": "RemoveCodeResponse",
+        "summary": "Returns the name of the customer using the given ID.",
+        "contentType": "application/json",
+        "payload": {
+          "$ref": "#/components/schemas/RemoveCodeResponse"
+        }
+      },
+      "VerifyCode": {
+        "name": "VerifyCode",
+        "title": "VerifyCode",
+        "summary": "Verify a provided code for a given slot ID.",
+        "contentType": "application/json",
+        "payload": {
+          "$ref": "#/components/schemas/VerifyCodeInput"
+        }
+      },
+      "VerifyCodeResponse": {
+        "name": "VerifyCodeResponse",
+        "title": "VerifyCodeResponse",
+        "summary": "Returns the name of the customer using the given ID.",
+        "contentType": "application/json",
+        "payload": {
+          "$ref": "#/components/schemas/VerifyCodeResponse"
+        }
+      }
+    },
+    "schemas": {
+      "SlotIdInput": {
+        "type": "object",
+        "description": "The slot ID to create or remove a verification code for.",
+        "properties": {
+          "slotId": {
+            "type": "string",
+            "description": "Slot ID"
+          }
+        },
+        "additionalProperties": false
+      },
+      "VerifyCodeInput": {
+        "type": "object",
+        "description": "The slot ID and verification code to verify together.",
+        "properties": {
+          "verificationCode": {
+            "type": "string",
+            "description": "8-character verification code"
+          },
+          "slotId": {
+            "type": "string",
+            "description": "Slot ID"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GenerateCodeResponse": {
+        "type": "string",
+        "description": "Verification code"
+      },
+      "RemoveCodeResponse": {
+        "type": "null",
+        "description": "Returns HTTP status `204 No content`"
+      },
+      "VerifyCodeResponse": {
+        "type": "string",
+        "description": "8-character verification code"
+      }
+    }
+  }
+}
