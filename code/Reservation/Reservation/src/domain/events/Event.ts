@@ -12,9 +12,9 @@ import { Metadata, MetadataConfigInput } from '../../interfaces/Metadata';
 
 import { getCorrelationId } from '../../infrastructure/utils/userMetadata';
 
-import { MissingMetadataFieldsError } from '../../application/errors/MissingMetadataFieldsError';
-import { NoMatchInEventCatalogError } from '../../application/errors/NoMatchInEventCatalogError';
-import { MissingEnvVarsError } from '../../application/errors/MissingEnvVarsError';
+import { MissingMetadataFieldsError } from '../../errors/MissingMetadataFieldsError';
+import { NoMatchInEventCatalogError } from '../../errors/NoMatchInEventCatalogError';
+import { MissingEnvVarsError } from '../../errors/MissingEnvVarsError';
 
 /**
  * @description Vend a "Event Carried State Transfer" type event with state

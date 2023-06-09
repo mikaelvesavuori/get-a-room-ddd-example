@@ -3,8 +3,8 @@ import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
 import { Repository } from '../../interfaces/Repository';
 import { AnalyticalRecord } from '../../interfaces/AnalyticalRecord';
 
-import { MissingEnvVarsError } from '../../application/errors/MissingEnvVarsError';
-import { FailureToAddError } from '../../application/errors/FailureToAddError';
+import { MissingEnvVarsError } from '../../errors/MissingEnvVarsError';
+import { FailureToAddError } from '../../errors/FailureToAddError';
 
 /**
  * @description Factory function to create a DynamoDB repository.

@@ -1,7 +1,7 @@
 import { SlotDTO } from '../../interfaces/Slot';
 
-import { MissingInputDataFieldError } from '../errors/MissingInputDataFieldError';
-import { MissingInputDataTimeError } from '../errors/MissingInputDataTimeError';
+import { MissingInputDataFieldError } from '../../errors/MissingInputDataFieldError';
+import { MissingInputDataTimeError } from '../../errors/MissingInputDataTimeError';
 
 /**
  * @description Validate and sanitize incoming input data.

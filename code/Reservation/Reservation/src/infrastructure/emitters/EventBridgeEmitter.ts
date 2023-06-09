@@ -3,7 +3,7 @@ import { EventBridgeClient, PutEventsCommand } from '@aws-sdk/client-eventbridge
 import { EventBridgeEvent } from '../../interfaces/Event';
 import { EventEmitter } from '../../interfaces/EventEmitter';
 
-import { MissingEnvVarsError } from '../../application/errors/MissingEnvVarsError';
+import { MissingEnvVarsError } from '../../errors/MissingEnvVarsError';
 
 /**
  * @description Factory function to return freshly minted EventBridge instance.

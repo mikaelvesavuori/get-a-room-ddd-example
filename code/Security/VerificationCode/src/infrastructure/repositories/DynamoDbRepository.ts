@@ -7,7 +7,7 @@ import {
 
 import { Repository } from '../../interfaces/Repository';
 
-import { MissingEnvVarsError } from '../../application/errors/MissingEnvVarsError';
+import { MissingEnvVarsError } from '../../errors/MissingEnvVarsError';
 import { SlotId } from '../../interfaces/SlotId';
 import { GeneratedVerificationCode } from '../../interfaces/GeneratedVerificationCode';
 

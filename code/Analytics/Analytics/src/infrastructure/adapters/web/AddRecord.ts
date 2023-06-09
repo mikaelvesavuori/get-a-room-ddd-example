@@ -3,7 +3,7 @@ import { MikroLog } from 'mikrolog';
 
 import { AddRecordUseCase } from '../../../application/usecases/AddRecordUseCase';
 
-import { MissingDataFieldsError } from '../../../application/errors/MissingDataFieldsError';
+import { MissingDataFieldsError } from '../../../errors/MissingDataFieldsError';
 
 import { setupDependencies } from '../../utils/setupDependencies';
 import { getDTO } from '../../utils/getDTO';

@@ -1,6 +1,6 @@
 import { TimeSlotDTO } from '../../interfaces/TimeSlot';
 
-import { InvalidHourCountError } from '../../application/errors/InvalidHourCountError';
+import { InvalidHourCountError } from '../../errors/InvalidHourCountError';
 
 /**
  * @description Handles the creation of valid time objects.

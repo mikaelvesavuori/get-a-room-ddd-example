@@ -3,8 +3,8 @@ import { MikroLog } from 'mikrolog';
 
 import { RemoveCodeUseCase } from '../../../application/usecases/RemoveCodeUseCase';
 
-import { MissingRequiredFieldsError } from '../../../application/errors/MissingRequiredFieldsError';
-import { UnsupportedVersionError } from '../../../application/errors/UnsupportedVersionError';
+import { MissingRequiredFieldsError } from '../../../errors/MissingRequiredFieldsError';
+import { UnsupportedVersionError } from '../../../errors/UnsupportedVersionError';
 
 import { setupDependencies } from '../../utils/setupDependencies';
 import { getDTO } from '../../utils/getDTO';

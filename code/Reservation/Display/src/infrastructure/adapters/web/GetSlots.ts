@@ -3,7 +3,7 @@ import { MikroLog } from 'mikrolog';
 
 import { GetSlotsUseCase } from '../../../application/usecases/GetSlotsUseCase';
 
-import { UnsupportedVersionError } from '../../../application/errors/UnsupportedVersionError';
+import { UnsupportedVersionError } from '../../../errors/UnsupportedVersionError';
 
 import { setupDependencies } from '../../utils/setupDependencies';
 import { getVersion } from '../../utils/getVersion';

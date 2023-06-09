@@ -3,8 +3,8 @@ import { MikroLog } from 'mikrolog';
 
 import { OpenSlotUseCase } from '../../../application/usecases/OpenSlotUseCase';
 
-import { MissingSlotId } from '../../../application/errors/MissingSlotId';
-import { UnsupportedVersionError } from '../../../application/errors/UnsupportedVersionError';
+import { MissingSlotId } from '../../../errors/MissingSlotId';
+import { UnsupportedVersionError } from '../../../errors/UnsupportedVersionError';
 
 import { setupDependencies } from '../../utils/setupDependencies';
 import { getSlotId } from '../../utils/getSlotId';

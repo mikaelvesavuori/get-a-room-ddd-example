@@ -1,5 +1,5 @@
 import { DynamoDBClient, PutItemCommand, QueryCommand } from '@aws-sdk/client-dynamodb';
-import { MissingEnvVarsError } from '../../application/errors/MissingEnvVarsError';
+import { MissingEnvVarsError } from '../../errors/MissingEnvVarsError';
 
 import { DynamoItem } from '../../interfaces/DynamoDb';
 import { Repository } from '../../interfaces/Repository';

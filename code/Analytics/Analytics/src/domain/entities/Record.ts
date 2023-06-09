@@ -1,6 +1,6 @@
 import { AnalyticalRecord } from '../../interfaces/AnalyticalRecord';
 
-import { RecordValidationError } from '../../application/errors/RecordValidationError';
+import { RecordValidationError } from '../../errors/RecordValidationError';
 
 /**
  * @description The `Record` entity that owns and operates on analytical records.

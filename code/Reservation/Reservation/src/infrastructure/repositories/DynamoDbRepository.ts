@@ -12,7 +12,7 @@ import { SlotDTO, SlotId } from '../../interfaces/Slot';
 import { DynamoItem, DynamoItems } from '../../interfaces/DynamoDb';
 import { Event, EventDetail } from '../../interfaces/Event';
 
-import { MissingEnvVarsError } from '../../application/errors/MissingEnvVarsError';
+import { MissingEnvVarsError } from '../../errors/MissingEnvVarsError';
 
 import { getCleanedItems } from '../utils/getCleanedItems';
 

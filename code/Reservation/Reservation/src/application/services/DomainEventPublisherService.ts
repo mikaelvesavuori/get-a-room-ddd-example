@@ -7,8 +7,8 @@ import {
 } from '../../interfaces/DomainEventPublisherService';
 import { EventEmitter } from '../../interfaces/EventEmitter';
 
-import { MissingDependenciesError } from '../errors/MissingDependenciesError';
-import { MissingEnvVarsError } from '../errors/MissingEnvVarsError';
+import { MissingDependenciesError } from '../../errors/MissingDependenciesError';
+import { MissingEnvVarsError } from '../../errors/MissingEnvVarsError';
 
 /**
  * @description Factory function to set up the `DomainEventPublisherService`.

@@ -29,7 +29,7 @@ import { DomainEventPublisherService } from '../../interfaces/DomainEventPublish
 import { VerificationCodeService } from '../../interfaces/VerificationCodeService';
 
 // Errors
-import { MissingDependenciesError } from '../../application/errors/MissingDependenciesError';
+import { MissingDependenciesError } from '../../errors/MissingDependenciesError';
 
 /**
  * @description Acts as the aggregate for Slot reservations (representing rooms and

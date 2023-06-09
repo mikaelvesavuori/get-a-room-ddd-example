@@ -4,10 +4,10 @@ import { SlotCreateInput, SlotDTO, Status } from '../../interfaces/Slot';
 import { TimeSlotDTO } from '../../interfaces/TimeSlot';
 import { MakeEventInput } from '../../interfaces/Event';
 
-import { CheckInConditionsNotMetError } from '../../application/errors/CheckInConditionsNotMetError';
-import { CheckOutConditionsNotMetError } from '../../application/errors/CheckOutConditionsNotMetError';
-import { CancellationConditionsNotMetError } from '../../application/errors/CancellationConditionsNotMetError';
-import { ReservationConditionsNotMetError } from '../../application/errors/ReservationConditionsNotMetError';
+import { CheckInConditionsNotMetError } from '../../errors/CheckInConditionsNotMetError';
+import { CheckOutConditionsNotMetError } from '../../errors/CheckOutConditionsNotMetError';
+import { CancellationConditionsNotMetError } from '../../errors/CancellationConditionsNotMetError';
+import { ReservationConditionsNotMetError } from '../../errors/ReservationConditionsNotMetError';
 
 /**
  * @description The `Slot` entity handles the lifecycle

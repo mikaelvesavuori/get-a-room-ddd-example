@@ -3,8 +3,8 @@ import { MikroLog } from 'mikrolog';
 
 import { UpdateSlotUseCase } from '../../../application/usecases/UpdateSlotUseCase';
 
-import { MissingDataFieldsError } from '../../../application/errors/MissingDataFieldsError';
-import { UnsupportedVersionError } from '../../../application/errors/UnsupportedVersionError';
+import { MissingDataFieldsError } from '../../../errors/MissingDataFieldsError';
+import { UnsupportedVersionError } from '../../../errors/UnsupportedVersionError';
 
 import { setupDependencies } from '../../utils/setupDependencies';
 import { getDTO } from '../../utils/getDTO';

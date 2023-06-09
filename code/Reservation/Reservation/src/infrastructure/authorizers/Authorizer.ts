@@ -2,9 +2,9 @@ import { APIGatewayProxyResult, AuthResponse } from 'aws-lambda';
 
 import fetch, { Response } from 'node-fetch';
 
-import { AuthorizationHeaderError } from '../../application/errors/AuthorizationHeaderError';
-import { InvalidVerificationCodeError } from '../../application/errors/InvalidVerificationCodeError';
-import { MissingSecurityApiEndpoint } from '../../application/errors/MissingSecurityApiEndpoint';
+import { AuthorizationHeaderError } from '../../errors/AuthorizationHeaderError';
+import { InvalidVerificationCodeError } from '../../errors/InvalidVerificationCodeError';
+import { MissingSecurityApiEndpoint } from '../../errors/MissingSecurityApiEndpoint';
 
 const SECURITY_API_ENDPOINT_VERIFY = process.env.SECURITY_API_ENDPOINT_VERIFY || '';
 

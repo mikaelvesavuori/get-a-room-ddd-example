@@ -2,8 +2,8 @@ import fetch, { Response } from 'node-fetch';
 
 import { VerificationCodeService } from '../../interfaces/VerificationCodeService';
 
-import { MissingSecurityApiEndpoint } from '../errors/MissingSecurityApiEndpoint';
-import { FailedGettingVerificationCodeError } from '../errors/FailedGettingVerificationCodeError';
+import { MissingSecurityApiEndpoint } from '../../errors/MissingSecurityApiEndpoint';
+import { FailedGettingVerificationCodeError } from '../../errors/FailedGettingVerificationCodeError';
 
 /**
  * @description Factory function to create a new instance of the `VerificationCodeService`.

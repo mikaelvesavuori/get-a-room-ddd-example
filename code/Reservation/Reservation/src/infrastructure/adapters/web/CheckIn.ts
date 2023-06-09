@@ -3,8 +3,8 @@ import { MikroLog } from 'mikrolog';
 
 import { CheckInUseCase } from '../../../application/usecases/CheckInUseCase';
 
-import { MissingRequestBodyError } from '../../../application/errors/MissingRequestBodyError';
-import { UnsupportedVersionError } from '../../../application/errors/UnsupportedVersionError';
+import { MissingRequestBodyError } from '../../../errors/MissingRequestBodyError';
+import { UnsupportedVersionError } from '../../../errors/UnsupportedVersionError';
 
 import { setupDependencies } from '../../utils/setupDependencies';
 import { getVersion } from '../../utils/getVersion';
