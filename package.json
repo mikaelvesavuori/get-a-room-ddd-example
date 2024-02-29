@@ -18,10 +18,9 @@
     "deploy": "npx sls deploy"
   },
   "devDependencies": {
-    "@serverless/compose": "1",
     "serverless": "3"
   },
   "dependencies": {
-    "@types/node": "17"
+    "@types/node": "20"
   }
 }

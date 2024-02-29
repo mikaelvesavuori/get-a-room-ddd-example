@@ -5,11 +5,8 @@ import { Record } from '../../src/domain/entities/Record';
 /**
  * NEGATIVE TESTS
  */
-test.serial(
-  'It should throw a MissingDependenciesError if no dependencies are passed in',
-  async (t) => {
-    const error = t.throws(() => new Record({} as any));
+test.serial('It should throw a RecordValidationError if missing required input data', async (t) => {
+  const error = t.throws(() => new Record().fromDto({} as any));
 
-    t.is(error?.name, 'MissingDependenciesError');
-  }
-);
+  t.is(error?.name, 'RecordValidationError');
+});

@@ -3,7 +3,7 @@ import { sanitizeInputData } from './sanitizeInputData';
 import { Repository } from '../../interfaces/Repository';
 import { SlotDTO, SlotId } from '../../interfaces/Slot';
 
-import { MissingSlotError } from '../errors/MissingSlotError';
+import { MissingSlotError } from '../../errors/MissingSlotError';
 
 /**
  * @description Factory function to create `SlotLoaderService` instance.

@@ -2,7 +2,8 @@ service: getaroom-verificationcode
 
 provider:
   name: aws
-  runtime: nodejs16.x
+  runtime: nodejs20.x
+  architecture: arm64
   stage: ${opt:stage, 'shared'}
   region: ${opt:region, 'eu-north-1'}
   memorySize: ${opt:memory, 1024}
@@ -14,9 +15,9 @@ provider:
     maxPreviousDeploymentArtifacts: 5
     serverSideEncryption: AES256
   stackTags:
-    Usage: ${self:service}
+    service: ${self:service}
   tags:
-    Usage: ${self:service}
+    service: ${self:service}
   apiGateway:
     minimumCompressionSize: 1024
   tracing:
@@ -36,15 +37,12 @@ provider:
     TABLE_NAME: ${self:custom.config.tableName}
 
 plugins:
-  - serverless-webpack
+  - serverless-esbuild
   - serverless-offline
   - serverless-iam-roles-per-function
 
 package:
   individually: true
-  patterns:
-    - node_modules/aws-sdk/**
-    - node_modules/aws-lambda/**
 
 custom:
   config:
@@ -54,11 +52,6 @@ custom:
   aws:
     databaseArn: arn:aws:dynamodb:${self:provider.region}:${self:custom.config.awsAccountNumber}:table/${self:custom.config.tableName}
     domainBusArn: arn:aws:events:${self:provider.region}:${self:custom.config.awsAccountNumber}:event-bus/${self:custom.config.domainBusName}
-  webpack:
-    webpackConfig: 'webpack.config.js'
-    includeModules: true
-    packager: 'npm'
-    excludeFiles: ./**/*.test.ts
 
 functions:
   GenerateCode:

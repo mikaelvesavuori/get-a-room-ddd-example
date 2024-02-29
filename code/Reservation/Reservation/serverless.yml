@@ -2,7 +2,8 @@ service: getaroom-slotreservation
 
 provider:
   name: aws
-  runtime: nodejs16.x
+  runtime: nodejs20.x
+  architecture: arm64
   stage: ${opt:stage, 'shared'}
   region: ${opt:region, 'eu-north-1'}
   memorySize: ${opt:memory, 1024}
@@ -14,9 +15,9 @@ provider:
     maxPreviousDeploymentArtifacts: 5
     serverSideEncryption: AES256
   stackTags:
-    Usage: ${self:service}
+    service: ${self:service}
   tags:
-    Usage: ${self:service}
+    service: ${self:service}
   apiGateway:
     minimumCompressionSize: 1024
   tracing:
@@ -30,8 +31,8 @@ provider:
             - xray:PutTelemetryRecords
             - xray:PutTraceSegments
           Resource:
-            - "*"
-        - Effect: "Allow"
+            - '*'
+        - Effect: 'Allow'
           Action:
             - dynamodb:Query
             - dynamodb:PutItem
@@ -50,15 +51,12 @@ provider:
     SECURITY_API_ENDPOINT_GENERATE: ${self:custom.aws.securityApiEndpointGenerateCode}
 
 plugins:
-  - serverless-webpack
+  - serverless-esbuild
   - serverless-offline
   - serverless-iam-roles-per-function
 
 package:
   individually: true
-  patterns:
-    - node_modules/aws-sdk/**
-    - node_modules/aws-lambda/**
 
 custom:
   config:
@@ -81,11 +79,6 @@ custom:
     databaseArn: arn:aws:dynamodb:${self:provider.region}:${self:custom.config.awsAccountNumber}:table/${self:custom.config.tableName}
     securityApiEndpointGenerateCode: https://${self:custom.config.securityApiGatewayRandomString}.execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}/generateCode
     securityApiEndpointVerifyCode: https://${self:custom.config.securityApiGatewayRandomString}.execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}/verifyCode
-  webpack:
-    webpackConfig: 'webpack.config.js'
-    includeModules: true
-    packager: 'npm'
-    excludeFiles: ./**/*.test.ts
 
 functions:
   #
@@ -182,7 +175,7 @@ functions:
     handler: src/infrastructure/adapters/web/CloseSlots.handler
     description: Close any slots that have passed their end times
     events:
-       # You can activate this to allow for HTTP-based calls
+      # You can activate this to allow for HTTP-based calls
       - http:
           method: GET
           path: /CloseSlots
@@ -194,7 +187,7 @@ functions:
     handler: src/infrastructure/adapters/web/OpenSlot.handler
     description: Open a slot
     events:
-       # You can activate this to allow for HTTP-based calls
+      # You can activate this to allow for HTTP-based calls
       - http:
           method: POST
           path: /OpenSlot
